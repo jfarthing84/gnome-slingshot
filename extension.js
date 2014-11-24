@@ -234,7 +234,7 @@ const SlingshotView = new Lang.Class({
             this._setModality(this.viewSelector.selected);
         }));
 
-        this.appSystem.connect('changed', Lang.bind(this, function() {
+        this._appSystemChangedId = this.appSystem.connect('changed', Lang.bind(this, function() {
 
             this._categories = this.appSystem.getCategories();
             this.apps = this.appSystem.getApps();
@@ -768,6 +768,12 @@ const SlingshotView = new Lang.Class({
         this._categoryColumnFocus = 0;
         this._categoryRowFocus = 0;
         this.searchbar.grabFocus(); // So we don't loose focus
+    },
+
+    destroy: function() {
+        this.appSystem.disconnect(this._appSystemChangedId);
+        this.appSystem.destroy();
+        this.parent();
     },
 
     get columns() {

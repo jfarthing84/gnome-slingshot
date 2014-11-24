@@ -69,7 +69,7 @@ const AppSystem = new Lang.Class({
             menu_basename: 'applications.menu',
             //flags: GMenu.TreeFlags.INCLUDE_EXCLUDED
         });
-        this._appsMenu.connect('changed', Lang.bind(this, this._updateAppSystem));
+        this._appsMenuChangedId = this._appsMenu.connect('changed', Lang.bind(this, this._updateAppSystem));
 
         this._updateAppSystem();
     },
@@ -202,6 +202,10 @@ const AppSystem = new Lang.Class({
         } else {
             return filtered;
         }
+    },
+
+    destroy: function() {
+        this._appsMenu.disconnect(this._appsMenuChangedId);
     }
 });
 Signals.addSignalMethods(AppSystem.prototype);
