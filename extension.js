@@ -641,6 +641,7 @@ const SlingshotView = new Lang.Class({
         }, this);
 
         this._gridView.actor.show();
+        this._gridView.actor.set_x(0);
         this._currentPosition = 0;
     },
 
