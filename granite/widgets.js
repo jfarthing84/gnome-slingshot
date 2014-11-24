@@ -104,8 +104,10 @@ const SearchBar = new Lang.Class({
     },
 
     _onChanged: function() {
-        if (this._timeoutId > 0)
+        if (this._timeoutId > 0) {
             Mainloop.source_remove(this._timeoutId);
+            this._timeoutId = 0;
+        }
 
         this._timeoutId = Mainloop.timeout_add(this.pauseDelay, Lang.bind(this, this._emitTextChanged));
     },
@@ -114,7 +116,10 @@ const SearchBar = new Lang.Class({
         let terms = this.actor.get_text();
         this.emit('text-changed-pause', terms);
 
-        return Mainloop.source_remove(this._timeoutId);
+        Mainloop.source_remove(this._timeoutId);
+        this._timeoutId = 0;
+
+        return true;
     }
 });
 
