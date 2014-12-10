@@ -3,6 +3,6 @@
     "uuid": "slingshot@jfarthing84",
     "name": "Slingshot",
     "description": "A clone of Pantheon's Slingshot launcher in the form of a GNOME Shell extension.",
-    "shell-version": [ "3.12", "3.14" ],
+    "shell-version": [ "3.10", "3.12", "3.14" ],
     "version": "1.0.1"
 }
