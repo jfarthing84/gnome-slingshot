@@ -13,15 +13,18 @@ const Granite = Me.imports.granite;
 const Tooltips = Me.imports.tooltips;
 const Widgets = Me.imports.widgets;
 
+const Convenience = Me.imports.convenience;
+let settings = Convenience.getSettings();
+
 const AppEntry = new Lang.Class({
     Name: 'AppEntry',
 
-    _init: function(app, iconSize) {
+    _init: function(app) {
 
         this._appplication = app;
         this.appName = app.name;
         this.execName = app.exec;
-        this.iconSize = iconSize || 64;
+        this.iconSize = settings.get_int('icon-size');
         this.icon = app.icon;
 
         this.actor = new St.Button({

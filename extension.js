@@ -130,7 +130,8 @@ const SlingshotView = new Lang.Class({
             return event.button === 3;
         }));
 
-        this.top.add(this.viewSelector.actor);
+        if (settings.get_boolean('show-category-filter'))
+            this.top.add(this.viewSelector.actor);
         this.top.add(topSeparator, { expand: true });
         this.top.add(this.searchbar.actor);
 
@@ -232,6 +233,26 @@ const SlingshotView = new Lang.Class({
 
         this.viewSelector.connect('mode-changed', Lang.bind(this, function() {
             this._setModality(this.viewSelector.selected);
+        }));
+
+        // Auto-update settings when changed
+        settings.connect('changed::columns', Lang.bind(this, function() {
+            this._readSettings(false, true, false);
+        }));
+        settings.connect('changed::rows', Lang.bind(this, function() {
+            this._readSettings(false, false, true);
+        }));
+        settings.connect('changed::show-category-filter', Lang.bind(this, function() {
+            if (settings.get_boolean('show-category-filter'))
+                this.top.insert_child_at_index(this.viewSelector.actor, 0);
+            else
+                this.top.remove_child(this.viewSelector.actor);
+        }));
+        settings.connect('changed::use-category', Lang.bind(this, function() {
+            if (settings.get_boolean('use-category'))
+                this._setModality(this.Modality.CATEGORY_VIEW);
+            else
+                this._setModality(this.Modality.NORMAL_VIEW);
         }));
 
         this._appSystemChangedId = this.appSystem.connect('changed', Lang.bind(this, function() {
@@ -630,7 +651,7 @@ const SlingshotView = new Lang.Class({
         this._gridView.clear();
 
         this.pageSwitcher.append('1');
-        this.pageSwitcher.setActive(0);
+        this.pageSwitcher.active = 0;
 
         this.appSystem.getAppsByName().forEach(function(app, index) {
             let appEntry = new Widgets.AppEntry(app);
