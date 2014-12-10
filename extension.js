@@ -16,12 +16,12 @@ const PopupMenu = imports.ui.popupMenu;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const Convenience = Me.imports.convenience;
 const Backend = Me.imports.backend;
 const Granite = Me.imports.granite;
 const Widgets = Me.imports.widgets;
 
-const Convenience = Me.imports.convenience;
-let settings = Convenience.getSettings('org.gnome.shell.extensions.slingshot');
+let settings;
 
 const SlingshotView = new Lang.Class({
     Name: 'SlingshotView',
@@ -871,5 +871,5 @@ function disable() {
 }
 
 function init(metadata) {
-
+    settings = Convenience.getSettings();
 }
