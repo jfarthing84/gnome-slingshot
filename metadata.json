@@ -1,6 +1,8 @@
 {
     "extension-id": "slingshot",
     "uuid": "slingshot@jfarthing84",
+    "settings-schema": "org.gnome.shell.extensions.slingshot",
+    "gettext-domain": "gnome-shell-extension-slingshot",
     "name": "Slingshot",
     "description": "A clone of Pantheon's Slingshot launcher in the form of a GNOME Shell extension.",
     "shell-version": [ "3.10", "3.12", "3.14" ],
