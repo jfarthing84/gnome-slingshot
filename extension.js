@@ -47,6 +47,8 @@ const SlingshotView = new Lang.Class({
         this._categoryColumnFocus = 0;
         this._categoryRowFocus = 0;
 
+        this._settingSignals = [];
+
         this._readSettings(true);
 
         this.appSystem = new Backend.AppSystem();
@@ -236,24 +238,24 @@ const SlingshotView = new Lang.Class({
         }));
 
         // Auto-update settings when changed
-        settings.connect('changed::columns', Lang.bind(this, function() {
+        this._settingSignals.push(settings.connect('changed::columns', Lang.bind(this, function() {
             this._readSettings(false, true, false);
-        }));
-        settings.connect('changed::rows', Lang.bind(this, function() {
+        })));
+        this._settingSignals.push(settings.connect('changed::rows', Lang.bind(this, function() {
             this._readSettings(false, false, true);
-        }));
-        settings.connect('changed::show-category-filter', Lang.bind(this, function() {
+        })));
+        this._settingSignals.push(settings.connect('changed::show-category-filter', Lang.bind(this, function() {
             if (settings.get_boolean('show-category-filter'))
                 this.top.insert_child_at_index(this.viewSelector.actor, 0);
             else
                 this.top.remove_child(this.viewSelector.actor);
-        }));
-        settings.connect('changed::use-category', Lang.bind(this, function() {
+        })));
+        this._settingSignals.push(settings.connect('changed::use-category', Lang.bind(this, function() {
             if (settings.get_boolean('use-category'))
                 this._setModality(this.Modality.CATEGORY_VIEW);
             else
                 this._setModality(this.Modality.NORMAL_VIEW);
-        }));
+        })));
 
         this._appSystemChangedId = this.appSystem.connect('changed', Lang.bind(this, function() {
 
@@ -792,6 +794,9 @@ const SlingshotView = new Lang.Class({
     },
 
     destroy: function() {
+        for (let id in this._settingSignals) {
+            settings.disconnect(id);
+        }
         this.appSystem.disconnect(this._appSystemChangedId);
         this.appSystem.destroy();
         this.parent();
